@@ -4,6 +4,8 @@ import com.moyobab.server.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,7 +25,8 @@ public class User extends BaseEntity {
 
     private String nickname;
 
-    private String birthDate;
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birthDate;
 
     private String phoneNumber;
 
