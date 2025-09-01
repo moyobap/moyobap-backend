@@ -1,19 +1,17 @@
 package com.moyobab.server.global.exception;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyobab.server.global.response.CommonResponse;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+@Slf4j
 @ControllerAdvice
-@RequiredArgsConstructor
 public class GlobalExceptionHandler {
-
-    private final ObjectMapper objectMapper;
 
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<CommonResponse<?>> handleApplicationException(ApplicationException e) {
@@ -25,7 +23,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CommonResponse<?>> handleValidException(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        String message = ex.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .findFirst()
+                .map(ObjectError::getDefaultMessage)
+                .orElse("유효성 검사 실패: 잘못된 요청입니다.");
+
         CommonResponse<?> response = CommonResponse.error(400, message);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -34,6 +38,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CommonResponse<?>> handleUnexpectedException(Exception ex) {
+        log.error("[UnexpectedException] {}", ex.getMessage(), ex);
         CommonResponse<?> response = CommonResponse.error(500, "서버 내부 오류가 발생했습니다.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
