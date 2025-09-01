@@ -6,11 +6,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSignUpRequest {
-    private String username;
+public class UserLoginRequestDto {
     private String email;
     private String password;
-    private String nickname;
-    private String birthDate;
-    private String phone;
 }

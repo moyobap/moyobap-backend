@@ -6,7 +6,9 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLoginRequest {
+@Builder
+public class UserResponseDto {
+    private Long userId;
     private String email;
-    private String password;
+    private String nickname;
 }
