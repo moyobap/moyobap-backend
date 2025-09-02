@@ -1,10 +1,7 @@
 package com.moyobab.server.participant.entity;
 
 import com.moyobab.server.global.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -23,9 +20,12 @@ public class Participant extends BaseEntity {
 
     private Long groupOrderId; // 참여한 그룹 주문 ID
 
-    private int orderAmount; // 해당 유저가 주문한 금액
+    @Column(nullable = false)
+    private Long orderAmount; // 해당 유저가 주문한 금액(원)
 
-    private boolean paid; // 결제 여부
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean paid = false; // 결제 여부
 
     // 연관관계 매핑 이후 추가
 }
