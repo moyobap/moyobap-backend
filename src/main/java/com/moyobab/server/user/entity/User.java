@@ -30,5 +30,9 @@ public class User extends BaseEntity {
 
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "login_type", nullable = false)
+    private LoginType loginType;
+
     // 연관 관계는 이후 추가
 }
