@@ -14,5 +14,5 @@ public class GroupOrderResponseDto {
     private int expectedAmount;
     private int maxDistance;
     private String deadlineTime;
-    private boolean isClosed;
+    private boolean closed;
 }
