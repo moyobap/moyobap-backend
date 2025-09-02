@@ -31,7 +31,7 @@ public class Payment extends BaseEntity {
     private PaymentStatus status; // 결제 상태
 
     @Column(nullable = false)
-    private int amount; // 결제 금액
+    private Long amount; // 결제 금액
 
     @Column(nullable = true)
     private String paymentMethod; // 결제 수단 (예: 카드, 카카오페이 등)
