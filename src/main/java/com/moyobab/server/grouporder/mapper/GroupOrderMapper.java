@@ -18,7 +18,7 @@ public class GroupOrderMapper {
                 .expectedAmount(groupOrder.getExpectedAmount())
                 .maxDistance(groupOrder.getMaxDistance())
                 .deadlineTime(groupOrder.getDeadlineTime().format(formatter))
-                .isClosed(groupOrder.isClosed())
+                .closed(groupOrder.isClosed())
                 .build();
     }
 }

@@ -11,6 +11,6 @@ public class ParticipantResponseDto {
     private Long id;
     private Long userId;
     private Long groupOrderId;
-    private int orderAmount;
+    private Long orderAmount;
     private boolean paid;
 }
