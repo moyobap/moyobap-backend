@@ -32,6 +32,14 @@ public class UserService {
                 req.getLoginType() == null ? LoginType.BASIC : req.getLoginType()
         );
 
-        User savedUser = userRepository.save(user);
+        userRepository.save(user);
+    }
+
+    public boolean isEmailDuplicated(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean isNicknameDuplicated(String nickname) {
+        return userRepository.existsByNickname(nickname);
     }
 }
