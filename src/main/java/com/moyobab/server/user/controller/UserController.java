@@ -31,4 +31,18 @@ public class UserController {
         userService.signup(req);
         return CommonResponse.success("회원가입 성공");
     }
+
+    @GetMapping("/check-email")
+    @Operation(summary = "이메일 중복 확인", description = "이미 가입된 이메일인지 확인합니다.")
+    public CommonResponse<Boolean> checkEmail(@RequestParam String email) {
+        boolean duplicated = userService.isEmailDuplicated(email);
+        return CommonResponse.success(!duplicated); // 중복 X → true
+    }
+
+    @GetMapping("/check-nickname")
+    @Operation(summary = "닉네임 중복 확인", description = "이미 사용 중인 닉네임인지 확인합니다.")
+    public CommonResponse<Boolean> checkNickname(@RequestParam String nickname) {
+        boolean duplicated = userService.isNicknameDuplicated(nickname);
+        return CommonResponse.success(!duplicated); // 중복 X → true
+    }
 }
