@@ -35,11 +35,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean isEmailDuplicated(String email) {
-        return userRepository.existsByEmail(email);
+    public boolean isNicknameAvailable(String nickname) {
+        return !userRepository.existsByNickname(nickname);
     }
 
-    public boolean isNicknameDuplicated(String nickname) {
-        return userRepository.existsByNickname(nickname);
+    public boolean isEmailAvailable(String email) {
+        return !userRepository.existsByEmail(email);
     }
 }
