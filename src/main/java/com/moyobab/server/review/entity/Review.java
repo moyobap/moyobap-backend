@@ -1,10 +1,8 @@
 package com.moyobab.server.review.entity;
 
 import com.moyobab.server.global.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.moyobab.server.user.entity.User;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -28,5 +26,7 @@ public class Review extends BaseEntity {
 
     private String comment;
 
-    // 연관관계는 추후 설정
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

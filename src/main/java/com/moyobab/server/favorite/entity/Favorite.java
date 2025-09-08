@@ -1,10 +1,8 @@
 package com.moyobab.server.favorite.entity;
 
 import com.moyobab.server.global.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.moyobab.server.user.entity.User;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -26,5 +24,7 @@ public class Favorite extends BaseEntity {
 
     private int preferenceLevel;  // 선호도 수준 (예: 1~5)
 
-    // 연관관계 추후 설정
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
