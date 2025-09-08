@@ -54,4 +54,16 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Favorite> favorites;
+
+    public static User createUser(String email, String password, String username, String nickname, LocalDate birthDate, String phone, LoginType loginType) {
+        return User.builder()
+                .email(email)
+                .password(password)
+                .username(username)
+                .nickname(nickname)
+                .birthDate(birthDate)
+                .phoneNumber(phone)
+                .loginType(loginType)
+                .build();
+    }
 }
