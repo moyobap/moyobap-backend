@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum UserErrorCase implements ErrorCase {
 
-    USER_NOT_FOUND(404, 1001, "사용자를 찾을 수 없습니다.");
+    USER_NOT_FOUND(404, 1001, "사용자를 찾을 수 없습니다."),
+    USER_ALREADY_EXISTS(400,1002,"이미 존재하는 회원입니다.");
 
     private final Integer httpStatusCode;
     private final Integer errorCode;
