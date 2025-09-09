@@ -51,18 +51,29 @@ class UserControllerTest {
     @DisplayName("회원가입 성공")
     void signupSuccess() throws Exception {
         UserSignUpRequestDto request = new UserSignUpRequestDto();
-        request.setEmail("test@naver.com");
-        request.setPassword("test!1234");
-        request.setUsername("testuser1");
-        request.setNickname("테스트유저1");
-        request.setPhoneNumber("010-1234-5678");
-        request.setBirthDate(LocalDate.of(1999, 1, 1));
+        request.setEmail("test2@naver.com");
+        request.setPassword("test!2345");
+        request.setUsername("testuser2");
+        request.setNickname("테스트유저2");
+        request.setPhoneNumber("010-2345-7890");
+        request.setBirthDate(LocalDate.of(2000, 1, 1));
+        request.setLoginType(LoginType.BASIC);
 
         String json = objectMapper.writeValueAsString(request);
 
         ResultActions result = mockMvc.perform(post("/api/v1/users/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
+                .content("""
+                    {
+                        "email": "test2@naver.com",
+                        "password": "test!2345",
+                        "username": "testuser2",
+                        "nickname": "테스트유저2",
+                        "phoneNumber": "010-2345-7890",
+                        "birthDate": "2000-01-01",
+                        "loginType": "BASIC"
+                    }
+                """));
 
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value("회원가입 성공"));
@@ -71,7 +82,7 @@ class UserControllerTest {
     @Test
     @DisplayName("이메일 중복 확인 - 사용 가능")
     void emailCheckAvailable() throws Exception {
-        String email = "test2@naver.com";
+        String email = "test3@naver.com";
 
         ResultActions result = mockMvc.perform(get("/api/v1/users/check-email")
                 .param("email", email));
@@ -94,7 +105,7 @@ class UserControllerTest {
     @Test
     @DisplayName("닉네임 중복 확인 - 사용 가능")
     void nicknameCheckAvailable() throws Exception {
-        String nickname = "테스트유저2";
+        String nickname = "테스트유저3";
 
         ResultActions result = mockMvc.perform(get("/api/v1/users/check-nickname")
                 .param("nickname", nickname));
