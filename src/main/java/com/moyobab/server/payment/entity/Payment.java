@@ -1,6 +1,7 @@
 package com.moyobab.server.payment.entity;
 
 import com.moyobab.server.global.entity.BaseEntity;
+import com.moyobab.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,5 +41,7 @@ public class Payment extends BaseEntity {
 
     private String failReason; // 실패 사유 (필요 X)
 
-    // 연관관계 추후 설정
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

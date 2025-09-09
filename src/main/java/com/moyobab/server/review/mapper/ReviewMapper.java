@@ -9,7 +9,7 @@ public class ReviewMapper {
         return ReviewResponseDto.builder()
                 .id(review.getId())
                 .groupOrderId(review.getGroupOrderId())
-                .userId(review.getUserId())
+                .userId(review.getUser().getId())
                 .rating(review.getRating())
                 .comment(review.getComment())
                 .build();

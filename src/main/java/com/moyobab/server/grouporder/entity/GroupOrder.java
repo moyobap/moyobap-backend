@@ -1,10 +1,8 @@
 package com.moyobab.server.grouporder.entity;
 
 import com.moyobab.server.global.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.moyobab.server.user.entity.User;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -32,7 +30,7 @@ public class GroupOrder extends BaseEntity {
 
     private boolean closed; // true -> 모집종료, false -> 모집중
 
-    private Long createdBy; // 유저 ID (주문이 어떤 유저에 의해서 생성되었는가를 표시)
-
-    // 연관 관계는 이후에 추가
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id", nullable = false)
+    private User creator;
 }

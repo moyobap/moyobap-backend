@@ -2,8 +2,10 @@ package com.moyobab.server.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.moyobab.server.user.entity.LoginType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,4 +37,7 @@ public class UserSignUpRequestDto {
     private LocalDate birthDate;
 
     private String phoneNumber;
+
+    @NotNull
+    private LoginType loginType;
 }

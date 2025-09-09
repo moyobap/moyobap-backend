@@ -1,6 +1,7 @@
 package com.moyobab.server.participant.entity;
 
 import com.moyobab.server.global.entity.BaseEntity;
+import com.moyobab.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,8 +17,6 @@ public class Participant extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId; // 참여한 유저 ID
-
     private Long groupOrderId; // 참여한 그룹 주문 ID
 
     @Column(nullable = false)
@@ -27,5 +26,7 @@ public class Participant extends BaseEntity {
     @Column(nullable = false)
     private boolean paid = false; // 결제 여부
 
-    // 연관관계 매핑 이후 추가
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
