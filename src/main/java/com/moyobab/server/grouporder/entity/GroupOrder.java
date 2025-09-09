@@ -30,9 +30,7 @@ public class GroupOrder extends BaseEntity {
 
     private boolean closed; // true -> 모집종료, false -> 모집중
 
-    private Long createdBy; // 유저 ID (주문이 어떤 유저에 의해서 생성되었는가를 표시)
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 }
