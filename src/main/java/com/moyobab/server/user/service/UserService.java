@@ -21,6 +21,9 @@ public class UserService {
 
     @Transactional
     public void signup(UserSignUpRequestDto req) {
+        final String email = req.getEmail() == null ? null : req.getEmail().trim().toLowerCase();
+        final String nickname = req.getNickname() == null ? null : req.getNickname().trim();
+
         if (userRepository.existsByEmail(req.getEmail())) {
             throw new ApplicationException(UserErrorCase.EMAIL_DUPLICATED);
         }
@@ -29,10 +32,10 @@ public class UserService {
         }
 
         User user = User.createUser(
-                req.getEmail().toLowerCase(),
+                email,
                 passwordEncoder.encode(req.getPassword()),
                 req.getUsername(),
-                req.getNickname(),
+                nickname,
                 req.getBirthDate(),
                 req.getPhoneNumber(),
                 req.getLoginType() == null ? LoginType.BASIC : req.getLoginType()
@@ -50,11 +53,13 @@ public class UserService {
         }
     }
 
+    @Transactional(readOnly = true)
     public boolean isNicknameAvailable(String nickname) {
-        return !userRepository.existsByNickname(nickname);
+        return !userRepository.existsByNickname(nickname == null ? null : nickname.trim());
     }
 
+    @Transactional(readOnly = true)
     public boolean isEmailAvailable(String email) {
-        return !userRepository.existsByEmail(email);
+        return !userRepository.existsByEmail(email == null ? null : email.trim().toLowerCase());
     }
 }
