@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,10 +26,12 @@ public class User extends BaseEntity {
 
     private String username;
 
+    @Column(name = "email", nullable = false, unique = true, length = 320)
     private String email;
 
     private String password;
 
+    @Column(name = "nickname", nullable = false, unique = true, length = 30)
     private String nickname;
 
     @Column(name = "birth_date", nullable = false)
@@ -40,20 +43,25 @@ public class User extends BaseEntity {
     @Column(name = "login_type", nullable = false)
     private LoginType loginType;
 
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
-    private List<GroupOrder> groupOrders;
+    @OneToMany(mappedBy = "creator")
+    @Builder.Default
+    private List<GroupOrder> groupOrders = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Participant> participants;
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<Participant> participants = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Review> reviews;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Payment> payments;
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<Payment> payments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Favorite> favorites;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    private List<Favorite> favorites = new ArrayList<>();
 
     public static User createUser(String email, String password, String username, String nickname, LocalDate birthDate, String phone, LoginType loginType) {
         return User.builder()
