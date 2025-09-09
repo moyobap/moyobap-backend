@@ -20,8 +20,6 @@ public class Review extends BaseEntity {
 
     private Long groupOrderId;  // 어떤 그룹 주문에 대한 리뷰인지
 
-    private Long userId;        // 리뷰 작성자
-
     private BigDecimal rating;   // 별점
 
     private String comment;

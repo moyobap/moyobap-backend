@@ -17,8 +17,6 @@ public class Participant extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId; // 참여한 유저 ID
-
     private Long groupOrderId; // 참여한 그룹 주문 ID
 
     @Column(nullable = false)
