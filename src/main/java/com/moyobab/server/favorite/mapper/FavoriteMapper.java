@@ -8,7 +8,7 @@ public class FavoriteMapper {
     public static FavoriteResponseDto toResponse(Favorite favorite) {
         return FavoriteResponseDto.builder()
                 .id(favorite.getId())
-                .userId(favorite.getUserId())
+                .userId(favorite.getUser().getId())
                 .category(favorite.getCategory())
                 .brand(favorite.getBrand())
                 .preferenceLevel(favorite.getPreferenceLevel())
