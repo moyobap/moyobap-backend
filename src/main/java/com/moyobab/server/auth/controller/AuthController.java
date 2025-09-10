@@ -45,7 +45,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "재발급 성공", content = @Content(schema = @Schema(implementation = TokenResponseDto.class))),
             @ApiResponse(responseCode = "401", description = "리프레시 토큰 오류", content = @Content(schema = @Schema(implementation = CommonResponse.class)))
     })
-    public CommonResponse<TokenResponseDto> reissue(@RequestParam String refreshToken) {
+    public CommonResponse<TokenResponseDto> reissue(@RequestParam("refreshToken") String refreshToken) {
         TokenResponseDto newTokens = authService.reissue(refreshToken);
         return CommonResponse.success(newTokens);
     }
