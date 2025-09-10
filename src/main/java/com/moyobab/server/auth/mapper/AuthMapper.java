@@ -1,13 +1,13 @@
 package com.moyobab.server.auth.mapper;
 
-import com.moyobab.server.auth.dto.TokenResponse;
+import com.moyobab.server.auth.dto.TokenResponseDto;
 import com.moyobab.server.auth.entity.RefreshToken;
 
 public class AuthMapper {
 
     // Entity에서 DTO
-    public static TokenResponse toTokenResponse(String accessToken, String refreshToken) {
-        return TokenResponse.builder()
+    public static TokenResponseDto toTokenResponse(String accessToken, String refreshToken) {
+        return TokenResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
