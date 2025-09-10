@@ -40,12 +40,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
+                                "/api/v1/auth/**",
                                 "/api/v1/users/signup",
                                 "/api/v1/users/check-email",
                                 "/api/v1/users/check-nickname",
-                                "/api/v1/users/login",
-                                "/api/v1/users/reissue",
-                                "/api/v1/users/logout",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()

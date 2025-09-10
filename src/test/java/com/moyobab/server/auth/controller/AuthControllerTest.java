@@ -1,7 +1,6 @@
 package com.moyobab.server.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moyobab.server.user.dto.UserLoginRequestDto;
 import com.moyobab.server.user.dto.UserSignUpRequestDto;
 import com.moyobab.server.user.entity.LoginType;
 import com.moyobab.server.user.service.UserService;
@@ -49,33 +48,35 @@ class AuthControllerTest {
     @Test
     @DisplayName("로그인 성공 - accessToken, refreshToken 발급")
     void loginSuccess() throws Exception {
-        UserLoginRequestDto loginRequest = UserLoginRequestDto.builder()
-                .email("test5@naver.com")
-                .password("test!1234")
-                .loginType(LoginType.BASIC)
-                .build();
+        String json = """
+            {
+                "email": "test5@naver.com",
+                "password": "test!1234",
+                "loginType": "BASIC"
+            }
+        """;
 
-        String json = objectMapper.writeValueAsString(loginRequest);
+        System.out.println("전송될 JSON: " + json);
 
         ResultActions result = mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
 
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.accessToken").exists())
-                .andExpect(jsonPath("$.refreshToken").exists());
+                .andExpect(jsonPath("$.data.accessToken").exists())
+                .andExpect(jsonPath("$.data.refreshToken").exists());
     }
 
     @Test
     @DisplayName("로그인 실패 - 비밀번호 틀림")
     void loginFailWrongPassword() throws Exception {
-        UserLoginRequestDto loginRequest = UserLoginRequestDto.builder()
-                .email("test5@naver.com")
-                .password("test!2345")
-                .loginType(LoginType.BASIC)
-                .build();
-
-        String json = objectMapper.writeValueAsString(loginRequest);
+        String json = """
+            {
+                "email": "test5@naver.com",
+                "password": "test!2345",
+                "loginType": "BASIC"
+            }
+        """;
 
         ResultActions result = mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -87,13 +88,13 @@ class AuthControllerTest {
     @Test
     @DisplayName("로그인 실패 - 존재하지 않는 이메일")
     void loginFailInvalidEmail() throws Exception {
-        UserLoginRequestDto loginRequest = UserLoginRequestDto.builder()
-                .email("test9999@naver.com")
-                .password("test!1234")
-                .loginType(LoginType.BASIC)
-                .build();
-
-        String json = objectMapper.writeValueAsString(loginRequest);
+        String json = """
+            {
+                "email": "test9999@naver.com",
+                "password": "test!1234",
+                "loginType": "BASIC"
+            }
+        """;
 
         ResultActions result = mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
