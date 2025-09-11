@@ -19,7 +19,6 @@ public class UserLoginRequestDto {
     @Size(max = 320)
     private String email;
 
-    @NotBlank(message = "비밀번호는 필수입니다.")
     @Size(min = 8, max = 72)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
