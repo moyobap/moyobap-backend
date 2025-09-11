@@ -7,7 +7,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum AuthErrorCase implements ErrorCase {
-    UNAUTHORIZED(401, 7001, "인증 정보가 없거나 userId를 추출할 수 없습니다.");
+    UNAUTHORIZED(401, 7001, "인증 정보가 없거나 userId를 추출할 수 없습니다."),
+    INVALID_REFRESH_TOKEN(401, 7002, "유효하지 않은 리프레시 토큰입니다."),
+    EXPIRED_REFRESH_TOKEN(401, 7003, "리프레시 토큰이 만료되었습니다."),
+    INVALID_PASSWORD(401, 7004, "비밀번호가 일치하지 않습니다.");
 
     private final Integer httpStatusCode;
     private final Integer errorCode;
