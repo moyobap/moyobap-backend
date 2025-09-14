@@ -34,6 +34,7 @@ public class UserSignUpRequestDto {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "생년월일은 필수입니다.")
     private LocalDate birthDate;
 
     private String phoneNumber;
