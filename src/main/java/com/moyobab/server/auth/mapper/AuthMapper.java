@@ -2,6 +2,7 @@ package com.moyobab.server.auth.mapper;
 
 import com.moyobab.server.auth.dto.TokenResponseDto;
 import com.moyobab.server.auth.entity.RefreshToken;
+import com.moyobab.server.user.dto.UserResponseDto;
 
 public class AuthMapper {
 
