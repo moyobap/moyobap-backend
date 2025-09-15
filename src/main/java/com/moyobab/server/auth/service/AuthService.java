@@ -42,7 +42,7 @@ public class AuthService {
         RefreshToken newToken = AuthMapper.toRefreshToken(user.getId(), refreshToken, expiry);
         refreshTokenRepository.save(newToken);
 
-        return AuthMapper.toTokenResponse(accessToken, refreshToken);
+        return AuthMapper.toTokenResponse(accessToken, refreshToken, user);
     }
 
     // Refresh Token을 통해 Access Token 재발급
