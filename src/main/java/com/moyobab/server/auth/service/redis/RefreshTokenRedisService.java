@@ -13,12 +13,18 @@ public class RefreshTokenRedisService {
     private final RedisTemplate<String, String> redisTemplate;
     private static final String PREFIX = "refreshToken:";
 
-    public void save(Long userId, String refreshToken, long expiryMillis) {
+    public void save(Long userId, String refreshToken, long ttlMillis) {
         String key = PREFIX + userId;
+
+        if (ttlMillis <= 0) {
+            redisTemplate.delete(key);
+            return;
+        }
+
         redisTemplate.opsForValue().set(
                 key,
                 refreshToken,
-                Duration.ofMillis(expiryMillis)
+                Duration.ofMillis(ttlMillis)
         );
     }
 

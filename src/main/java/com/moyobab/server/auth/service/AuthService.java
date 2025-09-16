@@ -35,9 +35,10 @@ public class AuthService {
 
         String accessToken = jwtProvider.generateToken(user.getId(), "ROLE_USER");
         String refreshToken = jwtProvider.generateRefreshToken(user.getId());
-        Long expiry = jwtProvider.getTokenExpiry(refreshToken);
-
-        refreshTokenRedisService.save(user.getId(), refreshToken, expiry);
+        Long expireAt = jwtProvider.getTokenExpiry(refreshToken);
+        long ttl = expireAt - System.currentTimeMillis();
+        if (ttl <= 0) throw new ApplicationException(AuthErrorCase.INVALID_REFRESH_TOKEN);
+        refreshTokenRedisService.save(user.getId(), refreshToken, ttl);
 
         return AuthMapper.toTokenResponse(accessToken, refreshToken, user);
     }
@@ -58,9 +59,10 @@ public class AuthService {
 
         String newAccessToken = jwtProvider.generateToken(userId, "ROLE_USER");
         String newRefreshToken = jwtProvider.generateRefreshToken(userId);
-        Long newExpiry = jwtProvider.getTokenExpiry(newRefreshToken);
-
-        refreshTokenRedisService.save(userId, newRefreshToken, newExpiry);
+        Long newExpireAt = jwtProvider.getTokenExpiry(newRefreshToken); // epoch ms
+        long newTtl = newExpireAt - System.currentTimeMillis();
+        if (newTtl <= 0) throw new ApplicationException(AuthErrorCase.INVALID_REFRESH_TOKEN);
+        refreshTokenRedisService.save(userId, newRefreshToken, newTtl);
 
         return AuthMapper.toTokenResponse(newAccessToken, newRefreshToken);
     }
