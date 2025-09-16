@@ -10,8 +10,10 @@ services:
       - "8080:8080"
     depends_on:
       - redis
+      - mysql
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_LOCATION: classpath:/application-docker.yml
       TZ: Asia/Seoul
       JAVA_TOOL_OPTIONS: -Duser.timezone=Asia/Seoul
     volumes:
@@ -26,5 +28,18 @@ services:
       - redis-data:/data
     restart: unless-stopped
 
+  mysql:
+    image: mysql:8.0
+    container_name: moyobab-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
 volumes:
   redis-data:
+  mysql-data:

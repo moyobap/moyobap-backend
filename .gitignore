@@ -36,6 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
+.env
+
 application.yml
 application-test.yml
 application-docker.yml

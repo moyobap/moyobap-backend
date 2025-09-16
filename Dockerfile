@@ -5,9 +5,10 @@ RUN apt-get update && \
     wget -O /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
     chmod +x /usr/local/bin/wait-for-it.sh
 
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
+WORKDIR /app
+
+COPY build/libs/server-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["/usr/local/bin/wait-for-it.sh", "redis:6379", "--", "java", "-jar", "app.jar"]
+ENTRYPOINT ["/usr/local/bin/wait-for-it.sh", "mysql:3306", "--timeout=60", "--", "/usr/local/bin/wait-for-it.sh", "redis:6379", "--", "java", "-jar", "app.jar"]
