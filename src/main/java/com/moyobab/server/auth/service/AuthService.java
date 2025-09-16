@@ -1,10 +1,9 @@
 package com.moyobab.server.auth.service;
 
 import com.moyobab.server.auth.dto.TokenResponseDto;
-import com.moyobab.server.auth.entity.RefreshToken;
 import com.moyobab.server.auth.exception.AuthErrorCase;
 import com.moyobab.server.auth.mapper.AuthMapper;
-import com.moyobab.server.auth.repository.RefreshTokenRepository;
+import com.moyobab.server.auth.service.redis.RefreshTokenRedisService;
 import com.moyobab.server.global.config.security.jwt.JwtTokenProvider;
 import com.moyobab.server.global.exception.ApplicationException;
 import com.moyobab.server.user.entity.LoginType;
@@ -21,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRedisService refreshTokenRedisService;
     private final PasswordEncoder encoder;
     private final JwtTokenProvider jwtProvider;
 
@@ -38,9 +37,7 @@ public class AuthService {
         String refreshToken = jwtProvider.generateRefreshToken(user.getId());
         Long expiry = jwtProvider.getTokenExpiry(refreshToken);
 
-        refreshTokenRepository.deleteByUserId(user.getId());
-        RefreshToken newToken = AuthMapper.toRefreshToken(user.getId(), refreshToken, expiry);
-        refreshTokenRepository.save(newToken);
+        refreshTokenRedisService.save(user.getId(), refreshToken, expiry);
 
         return AuthMapper.toTokenResponse(accessToken, refreshToken, user);
     }
@@ -52,25 +49,18 @@ public class AuthService {
         }
 
         Long userId = jwtProvider.getUserId(refreshToken);
-        RefreshToken saved = refreshTokenRepository.findByUserId(userId)
-                .orElseThrow(() -> new ApplicationException(AuthErrorCase.INVALID_REFRESH_TOKEN));
 
-        if (!saved.getToken().equals(refreshToken)) {
+        // Redis 조회
+        String saved = refreshTokenRedisService.get(userId);
+        if (saved == null || !saved.equals(refreshToken)) {
             throw new ApplicationException(AuthErrorCase.INVALID_REFRESH_TOKEN);
-        }
-
-        if (saved.getExpiry() < System.currentTimeMillis()) {
-            refreshTokenRepository.delete(saved);
-            throw new ApplicationException(AuthErrorCase.EXPIRED_REFRESH_TOKEN);
         }
 
         String newAccessToken = jwtProvider.generateToken(userId, "ROLE_USER");
         String newRefreshToken = jwtProvider.generateRefreshToken(userId);
         Long newExpiry = jwtProvider.getTokenExpiry(newRefreshToken);
 
-        saved.setToken(newRefreshToken);
-        saved.setExpiry(newExpiry);
-        refreshTokenRepository.save(saved);
+        refreshTokenRedisService.save(userId, newRefreshToken, newExpiry);
 
         return AuthMapper.toTokenResponse(newAccessToken, newRefreshToken);
     }
@@ -78,6 +68,6 @@ public class AuthService {
     // 로그아웃: Refresh Token 제거
     @Transactional
     public void logout(Long userId) {
-        refreshTokenRepository.deleteByUserId(userId);
+        refreshTokenRedisService.delete(userId);
     }
 }
