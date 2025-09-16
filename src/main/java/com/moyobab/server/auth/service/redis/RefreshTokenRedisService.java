@@ -1,0 +1,37 @@
+package com.moyobab.server.auth.service.redis;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+
+@Service
+@RequiredArgsConstructor
+public class RefreshTokenRedisService {
+
+    private final RedisTemplate<String, String> redisTemplate;
+    private static final String PREFIX = "refreshToken:";
+
+    public void save(Long userId, String refreshToken, long expiryMillis) {
+        String key = PREFIX + userId;
+        redisTemplate.opsForValue().set(
+                key,
+                refreshToken,
+                Duration.ofMillis(expiryMillis)
+        );
+    }
+
+    public String get(Long userId) {
+        return redisTemplate.opsForValue().get(PREFIX + userId);
+    }
+
+    public void delete(Long userId) {
+        redisTemplate.delete(PREFIX + userId);
+    }
+
+    public boolean isSame(Long userId, String refreshToken) {
+        String saved = get(userId);
+        return saved != null && saved.equals(refreshToken);
+    }
+}
