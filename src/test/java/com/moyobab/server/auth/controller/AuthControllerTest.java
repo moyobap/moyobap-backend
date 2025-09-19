@@ -33,20 +33,21 @@ class AuthControllerTest {
 
     @BeforeEach
     void setUp() {
-        UserSignUpRequestDto dto = new UserSignUpRequestDto();
-        dto.setEmail("test5@naver.com");
-        dto.setPassword("test!1234");
-        dto.setUsername("testuser5");
-        dto.setNickname("테스트유저5");
-        dto.setPhoneNumber("010-1111-2222");
-        dto.setBirthDate(LocalDate.of(2001, 1, 1));
-        dto.setLoginType(LoginType.BASIC);
+        UserSignUpRequestDto dto = UserSignUpRequestDto.builder()
+                .email("test5@naver.com")
+                .password("test!1234")
+                .username("testuser5")
+                .nickname("테스트유저5")
+                .phoneNumber("010-1111-2222")
+                .birthDate(LocalDate.of(2001, 1, 1))
+                .loginType(LoginType.BASIC)
+                .build();
 
         userService.signup(dto);
     }
 
     @Test
-    @DisplayName("로그인 성공 - accessToken, refreshToken 발급")
+    @DisplayName("로그인 성공 - accessToken, refreshToken, user 정보 반환")
     void loginSuccess() throws Exception {
         String json = """
             {
@@ -56,19 +57,19 @@ class AuthControllerTest {
             }
         """;
 
-        System.out.println("전송될 JSON: " + json);
-
-        ResultActions result = mockMvc.perform(post("/api/v1/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        result.andExpect(status().isOk())
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.accessToken").exists())
-                .andExpect(jsonPath("$.data.refreshToken").exists());
+                .andExpect(jsonPath("$.data.refreshToken").exists())
+                .andExpect(jsonPath("$.data.user.userId").exists())
+                .andExpect(jsonPath("$.data.user.email").value("test5@naver.com"))
+                .andExpect(jsonPath("$.data.user.nickname").value("테스트유저5"));
     }
 
     @Test
-    @DisplayName("로그인 실패 - 비밀번호 틀림")
+    @DisplayName("로그인 실패 - 비밀번호 오류")
     void loginFailWrongPassword() throws Exception {
         String json = """
             {
@@ -78,15 +79,14 @@ class AuthControllerTest {
             }
         """;
 
-        ResultActions result = mockMvc.perform(post("/api/v1/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        result.andExpect(status().isUnauthorized());
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    @DisplayName("로그인 실패 - 존재하지 않는 이메일")
+    @DisplayName("로그인 실패 - 이메일 없음")
     void loginFailInvalidEmail() throws Exception {
         String json = """
             {
@@ -96,10 +96,9 @@ class AuthControllerTest {
             }
         """;
 
-        ResultActions result = mockMvc.perform(post("/api/v1/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        result.andExpect(status().isNotFound());
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isNotFound());
     }
 }
