@@ -28,7 +28,7 @@ class MenuCategoryControllerTest {
     void getAllMenuCategories() throws Exception {
         ResultActions result = mockMvc.perform(get("/api/v1/menu-categories")
                 .contentType(MediaType.APPLICATION_JSON));
-        
+
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data.length()").value(MenuCategoryType.values().length))
