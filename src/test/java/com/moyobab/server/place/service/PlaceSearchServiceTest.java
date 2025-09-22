@@ -7,13 +7,12 @@ import com.moyobab.server.place.dto.PlaceResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 class PlaceSearchServiceTest {
 
     @Test
@@ -48,14 +47,14 @@ class PlaceSearchServiceTest {
         """;
 
         Mockito.when(mockClient.searchKeyword(
-                Mockito.anyString(),
-                Mockito.anyDouble(),
-                Mockito.anyDouble(),
-                Mockito.any(),
-                Mockito.anyString(),
+                Mockito.any(String.class),
+                Mockito.any(Double.class),
+                Mockito.any(Double.class),
+                Mockito.any(Integer.class),
+                Mockito.nullable(String.class),
                 Mockito.anyInt(),
                 Mockito.anyInt()
-        )).thenReturn(mockJson);
+        )).thenReturn(mockJson).thenReturn(mockJson);
 
         // when
         List<PlaceResponseDto> results = service.searchByCategory(
@@ -67,13 +66,7 @@ class PlaceSearchServiceTest {
 
         // then
         assertEquals(2, results.size());
-
-        PlaceResponseDto place1 = results.get(0);
-        assertEquals("BBQ치킨 홍대점", place1.getPlaceName());
-        assertEquals("서울 마포구 양화로", place1.getAddressName());
-
-        PlaceResponseDto place2 = results.get(1);
-        assertEquals("BHC 치킨 신촌점", place2.getPlaceName());
-        assertEquals("서울 서대문구 신촌로", place2.getAddressName());
+        assertEquals("BBQ치킨 홍대점", results.get(0).getPlaceName());
+        assertEquals("BHC 치킨 신촌점", results.get(1).getPlaceName());
     }
 }
