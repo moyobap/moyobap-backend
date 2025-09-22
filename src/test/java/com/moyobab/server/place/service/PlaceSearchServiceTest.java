@@ -1,6 +1,7 @@
 package com.moyobab.server.place.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moyobab.server.global.config.kakao.KakaoPlaceClient;
 import com.moyobab.server.menucategory.entity.MenuCategoryType;
 import com.moyobab.server.place.dto.PlaceResponseDto;
 import org.junit.jupiter.api.DisplayName;
