@@ -75,4 +75,47 @@ class PlaceSearchControllerTest {
                 .andExpect(jsonPath("$.data[0].placeName").value("BBQ치킨 홍대점"))
                 .andExpect(jsonPath("$.data[1].placeName").value("BHC 치킨 신촌점"));
     }
+
+    @Test
+    @DisplayName("음식점 검색 API - 실패 (카테고리 누락)")
+    void searchPlacesMissingCategory() throws Exception {
+        mockMvc.perform(get("/api/v1/places/search")
+                        .param("x", "127.02758")
+                        .param("y", "37.49794")
+                        .param("radius", "1500")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorCode").value(9001));
+    }
+
+    @Test
+    @DisplayName("음식점 검색 API - 실패 (좌표 누락)")
+    void searchPlacesMissingCoordinates() throws Exception {
+        mockMvc.perform(get("/api/v1/places/search")
+                        .param("category", "CHICKEN")
+                        .param("radius", "1500")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorCode").value(9002));
+    }
+
+    @Test
+    @DisplayName("음식점 검색 API - 실패 (검색 결과 없음)")
+    void searchPlacesNotFound() throws Exception {
+        Mockito.when(placeSearchService.searchByCategory(
+                Mockito.eq(MenuCategoryType.CHICKEN),
+                Mockito.anyDouble(),
+                Mockito.anyDouble(),
+                Mockito.anyInt()
+        )).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/v1/places/search")
+                        .param("category", "CHICKEN")
+                        .param("x", "127.02758")
+                        .param("y", "37.49794")
+                        .param("radius", "1500")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.errorCode").value(9004));
+    }
 }
