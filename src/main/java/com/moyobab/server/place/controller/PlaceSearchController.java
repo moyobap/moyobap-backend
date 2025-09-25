@@ -43,7 +43,7 @@ public class PlaceSearchController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "검색 성공",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = PlaceResponseDto.class)))),
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 (좌표 누락, 반경 범위 초과 등)",
                     content = @Content(schema = @Schema(implementation = CommonResponse.class))),
             @ApiResponse(responseCode = "404", description = "해당 카테고리에 대한 결과 없음",
