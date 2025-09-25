@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 @Component
 @RequiredArgsConstructor
 public class KakaoPlaceClient {
@@ -46,6 +48,7 @@ public class KakaoPlaceClient {
                 .onStatus(status -> !status.is2xxSuccessful(),
                         clientResponse -> clientResponse.createException().flatMap(Mono::error))
                 .bodyToMono(String.class)
+                .timeout(Duration.ofSeconds(5))
                 .block();
     }
 }

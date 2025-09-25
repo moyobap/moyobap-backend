@@ -67,8 +67,14 @@ public class PlaceSearchService {
                         double lat = 0.0;
                         double lon = 0.0;
                         try {
-                            lat = Double.parseDouble(dto.getLatitude());
-                            lon = Double.parseDouble(dto.getLongitude());
+                            String latStr = dto.getLatitude();
+                            if (latStr != null && !latStr.isBlank()) {
+                                lat = Double.parseDouble(latStr);
+                            }
+                            String lonStr = dto.getLongitude();
+                            if (lonStr != null && !lonStr.isBlank()) {
+                                lon = Double.parseDouble(lonStr);
+                            }
                         } catch (NumberFormatException ignored) {}
 
                         return PlaceResponseDto.builder()

@@ -1,9 +1,10 @@
 package com.moyobab.server.place.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class KakaoPlaceDto {
     @JsonProperty("place_name")

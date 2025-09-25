@@ -10,7 +10,10 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/places")
 @RequiredArgsConstructor
+@Validated
 public class PlaceSearchController {
 
     private final PlaceSearchService placeSearchService;
@@ -44,7 +48,8 @@ public class PlaceSearchController {
             @RequestParam("category") MenuCategoryType category,
             @RequestParam("x") Double x,
             @RequestParam("y") Double y,
-            @RequestParam(value = "radius", required = false, defaultValue = "2000") Integer radius
+            @RequestParam(value = "radius", required = false, defaultValue = "2000")
+            @Min(0) @Max(10000) Integer radius
     ) {
         List<PlaceResponseDto> results = placeSearchService.searchByCategory(category, x, y, radius);
         return CommonResponse.success(results);
