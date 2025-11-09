@@ -10,12 +10,20 @@ import org.springframework.stereotype.Service;
 import com.moyobab.server.user.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class GroupOrderService {
 
     private final GroupOrderRepository groupOrderRepository;
+
+    public List<GroupOrderResponseDto> getActiveGroupOrders() {
+        return groupOrderRepository.findAllByClosedFalseOrderByDeadlineTimeAsc().stream()
+                .map(GroupOrderMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 
     public GroupOrderResponseDto createGroupOrder(GroupOrderRequestDto request, User creator) {
         LocalDateTime deadline = LocalDateTime.now().plusMinutes(request.getDurationMinutes());

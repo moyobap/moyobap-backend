@@ -8,6 +8,7 @@ import com.moyobab.server.user.entity.User;
 import com.moyobab.server.auth.resolver.CurrentUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -43,5 +46,16 @@ public class GroupOrderController {
     ) {
         GroupOrderResponseDto response = groupOrderService.createGroupOrder(request, user);
         return CommonResponse.success(response);
+    }
+
+    @GetMapping("/active")
+    @Operation(summary = "진행 중인 그룹 리스트 조회", description = "모집 중인 그룹들을 마감 시간 순으로 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "진행 중인 그룹 리스트 조회 성공",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = GroupOrderResponseDto.class))))
+    })
+    public CommonResponse<List<GroupOrderResponseDto>> getActiveGroupOrders() {
+        List<GroupOrderResponseDto> results = groupOrderService.getActiveGroupOrders();
+        return CommonResponse.success(results);
     }
 }
