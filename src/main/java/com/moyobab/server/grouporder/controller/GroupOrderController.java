@@ -1,9 +1,47 @@
 package com.moyobab.server.grouporder.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.moyobab.server.global.response.CommonResponse;
+import com.moyobab.server.grouporder.dto.GroupOrderRequestDto;
+import com.moyobab.server.grouporder.dto.GroupOrderResponseDto;
+import com.moyobab.server.grouporder.service.GroupOrderService;
+import com.moyobab.server.user.entity.User;
+import com.moyobab.server.auth.resolver.CurrentUser;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/v1/group-orders")
+@RequiredArgsConstructor
 public class GroupOrderController {
+
+    private final GroupOrderService groupOrderService;
+
+    @PostMapping
+    @Operation(
+            summary = "그룹 생성",
+            description = "사용자가 새로운 그룹을 생성합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "그룹 생성 성공",
+                    content = @Content(schema = @Schema(implementation = GroupOrderResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 데이터",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "인증되지 않은 사용자 요청",
+                    content = @Content)
+    })
+    public CommonResponse<GroupOrderResponseDto> createGroupOrder(
+            @Parameter(hidden = true) @CurrentUser User user,
+            @RequestBody @Valid GroupOrderRequestDto request
+    ) {
+        GroupOrderResponseDto response = groupOrderService.createGroupOrder(request, user);
+        return CommonResponse.success(response);
+    }
 }
