@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ActiveProfiles("test")
+@ActiveProfiles("ci")
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @Transactional

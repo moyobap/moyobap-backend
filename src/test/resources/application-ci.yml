@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-exp: 3600000
+  refresh-exp: 604800000
+
+kakao:
+  api:
+    key: 3547u0mf7521e51735162gk2d97b22 # 실제 api key 아님 (테스트 더미용)
