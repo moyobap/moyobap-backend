@@ -1,11 +1,14 @@
 package com.moyobab.server.grouporder.controller;
 
+import com.moyobab.server.global.exception.ApplicationException;
 import com.moyobab.server.global.response.CommonResponse;
 import com.moyobab.server.grouporder.dto.GroupOrderRequestDto;
 import com.moyobab.server.grouporder.dto.GroupOrderResponseDto;
 import com.moyobab.server.grouporder.service.GroupOrderService;
 import com.moyobab.server.user.entity.User;
 import com.moyobab.server.auth.resolver.CurrentUser;
+import com.moyobab.server.user.exception.UserErrorCase;
+import com.moyobab.server.user.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -26,6 +29,8 @@ import java.util.List;
 public class GroupOrderController {
 
     private final GroupOrderService groupOrderService;
+    private final UserRepository userRepository;
+
 
     @PostMapping
     @Operation(
@@ -41,10 +46,12 @@ public class GroupOrderController {
                     content = @Content)
     })
     public CommonResponse<GroupOrderResponseDto> createGroupOrder(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @Parameter(hidden = true) @CurrentUser Long userId,
             @RequestBody @Valid GroupOrderRequestDto request
     ) {
-        GroupOrderResponseDto response = groupOrderService.createGroupOrder(request, user);
+        User creator = userRepository.findById(userId)
+                .orElseThrow(() -> new ApplicationException(UserErrorCase.USER_NOT_FOUND));
+        GroupOrderResponseDto response = groupOrderService.createGroupOrder(request, creator);
         return CommonResponse.success(response);
     }
 
