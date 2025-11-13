@@ -64,4 +64,4 @@ jobs:
           restore-keys: gradle-${{ runner.os }}-
 
       - name: Build and Test
-        run: ./gradlew clean build --stacktrace
+        run: ./gradlew clean build --stacktrace --info
