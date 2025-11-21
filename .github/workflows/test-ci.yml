@@ -25,7 +25,6 @@ jobs:
       SPRING_PROFILES_ACTIVE: test
       SPRING_DATA_REDIS_HOST: localhost
       SPRING_DATA_REDIS_PORT: 6379
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     steps:
       - name: Checkout source
