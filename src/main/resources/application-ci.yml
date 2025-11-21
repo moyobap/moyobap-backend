@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/moyobab_test
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ${MYSQL_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+  main:
+    allow-bean-definition-overriding: true
+
+jwt:
+  secret: ${JWT_SECRET}
+
+kakao:
+  api:
+    key: 3547u0mf7521e51735162gk2d97b22 # 실제 키 X

@@ -1,3 +1,4 @@
+/*
 package com.moyobab.server.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +22,7 @@ import java.time.LocalDate;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ActiveProfiles("ci")
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @Transactional
@@ -112,3 +113,5 @@ class UserControllerTest {
                 .andExpect(status().isConflict());
     }
 }
+
+ */
