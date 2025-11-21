@@ -1,4 +1,4 @@
-name: Dev CI pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -14,29 +14,29 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
         ports:
           - 3306:3306
         options: >-
-          --health-cmd "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -p${{ secrets.MYSQL_PASSWORD }}"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
       redis:
         image: redis:7.2
         ports:
           - 6379:6379
         options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
     env:
       SPRING_PROFILES_ACTIVE: ci
-      SPRING_DATA_REDIS_HOST: localhost
+      SPRING_DATA_REDIS_HOST: 127.0.0.1
       SPRING_DATA_REDIS_PORT: 6379
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -63,5 +63,17 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
-      - name: Build and Test
-        run: ./gradlew clean build -x test
+      - name: Wait for MySQL to be ready
+        run: |
+          echo "Waiting for MySQL to be ready..."
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -uroot -p"${MYSQL_PASSWORD}" --silent; then
+              echo "MySQL is ready"
+              break
+            fi
+            echo "Still waiting..."
+            sleep 3
+          done
+
+      - name: Build and Run Tests
+        run: ./gradlew clean build --stacktrace

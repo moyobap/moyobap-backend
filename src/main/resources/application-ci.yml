@@ -17,9 +17,12 @@ spring:
       host: 127.0.0.1
       port: 6379
 
+  main:
+    allow-bean-definition-overriding: true
+
 jwt:
   secret: ${JWT_SECRET}
 
 kakao:
   api:
-    key: 3547u0mf7521e51735162gk2d97b22 # 실제 api key 아님 (테스트 더미용)
+    key: 3547u0mf7521e51735162gk2d97b22 # 실제 키 X
