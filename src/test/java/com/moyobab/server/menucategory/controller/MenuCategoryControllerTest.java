@@ -1,4 +1,3 @@
-/*
 package com.moyobab.server.menucategory.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,5 +38,3 @@ class MenuCategoryControllerTest {
                 .andExpect(jsonPath("$.data[0].kakaoCategoryKeyword").value(MenuCategoryType.values()[0].getKakaoCategoryKeyword()));
     }
 }
-
- */

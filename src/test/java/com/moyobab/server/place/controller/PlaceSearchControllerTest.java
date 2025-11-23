@@ -1,4 +1,3 @@
-/*
 package com.moyobab.server.place.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -123,4 +122,3 @@ class PlaceSearchControllerTest {
     }
 }
 
- */
