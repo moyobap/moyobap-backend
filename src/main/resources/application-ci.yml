@@ -25,4 +25,4 @@ jwt:
 
 kakao:
   api:
-    key: 3547u0mf7521e51735162gk2d97b22 # 실제 키 X
+    key: ${KAKAO_API_KEY:dummy}
