@@ -11,6 +11,14 @@ public class GroupOrderMapper {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static GroupOrderResponseDto toResponse(GroupOrder groupOrder) {
+        // 현재 참여한 사람들의 주문 금액 합계 계산
+        int totalOrderAmount = 0;
+        if (groupOrder.getParticipants() != null) {
+            totalOrderAmount = groupOrder.getParticipants().stream()
+                    .mapToInt(participant -> participant.getOrderAmount().intValue())
+                    .sum();
+        }
+
         return GroupOrderResponseDto.builder()
                 .id(groupOrder.getId())
                 .menuCategory(groupOrder.getMenuCategory())
@@ -19,7 +27,7 @@ public class GroupOrderMapper {
                 .maxDistance(groupOrder.getMaxDistance())
                 .deadlineTime(groupOrder.getDeadlineTime().format(formatter))
                 .closed(groupOrder.isClosed())
-                .currentOrderAmount(0)
+                .currentOrderAmount(totalOrderAmount)
                 .creatorNickname(groupOrder.getCreator().getNickname())
                 .build();
     }
