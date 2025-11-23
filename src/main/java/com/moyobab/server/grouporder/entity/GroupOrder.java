@@ -1,11 +1,13 @@
 package com.moyobab.server.grouporder.entity;
 
 import com.moyobab.server.global.entity.BaseEntity;
+import com.moyobab.server.participant.entity.Participant;
 import com.moyobab.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,4 +35,7 @@ public class GroupOrder extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
+
+    @OneToMany(mappedBy = "groupOrder")
+    private List<Participant> participants;
 }

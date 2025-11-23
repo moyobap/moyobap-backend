@@ -8,7 +8,7 @@ public class ParticipantMapper {
     public static ParticipantResponseDto toResponse(Participant participant) {
         return ParticipantResponseDto.builder()
                 .id(participant.getId())
-                .groupOrderId(participant.getGroupOrderId())
+                .groupOrderId(participant.getGroupOrder().getId())
                 .orderAmount(participant.getOrderAmount())
                 .paid(participant.isPaid())
                 .build();

@@ -15,4 +15,6 @@ public class GroupOrderResponseDto {
     private int maxDistance;
     private String deadlineTime;
     private boolean closed;
+    private int currentOrderAmount;
+    private String creatorNickname;
 }

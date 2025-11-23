@@ -46,6 +46,7 @@ public class SecurityConfig {
                                 "/api/v1/users/check-email",
                                 "/api/v1/users/check-nickname",
                                 "/api/v1/places/search",
+                                "/api/v1/group-orders/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()

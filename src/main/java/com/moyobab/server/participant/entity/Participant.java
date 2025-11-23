@@ -1,6 +1,7 @@
 package com.moyobab.server.participant.entity;
 
 import com.moyobab.server.global.entity.BaseEntity;
+import com.moyobab.server.grouporder.entity.GroupOrder;
 import com.moyobab.server.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,8 +18,6 @@ public class Participant extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long groupOrderId; // 참여한 그룹 주문 ID
-
     @Column(nullable = false)
     private Long orderAmount; // 해당 유저가 주문한 금액(원)
 
@@ -29,4 +28,8 @@ public class Participant extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_order_id", nullable = false)
+    private GroupOrder groupOrder;
 }
