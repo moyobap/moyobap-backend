@@ -25,8 +25,9 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 jwt:
-  secret: ${JWT_SECRET}
+  secret: "12345678901234567890123456789012" # 테스트용 값 (실제 X)
 
 kakao:
+  enabled: false
   api:
-    key: 3547u0mf7521e51735162gk2d97b22 # 실제 api key 아님 (테스트 더미용)
+    key: ${KAKAO_API_KEY:dummy}

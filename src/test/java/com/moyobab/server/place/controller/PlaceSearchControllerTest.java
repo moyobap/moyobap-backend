@@ -2,6 +2,7 @@
 package com.moyobab.server.place.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moyobab.server.global.config.TestKakaoConfig;
 import com.moyobab.server.menucategory.entity.MenuCategoryType;
 import com.moyobab.server.place.dto.PlaceResponseDto;
 import com.moyobab.server.place.service.PlaceSearchService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
+@Import(TestKakaoConfig.class)
 class PlaceSearchControllerTest {
 
     @Autowired
@@ -124,3 +127,4 @@ class PlaceSearchControllerTest {
 }
 
  */
+

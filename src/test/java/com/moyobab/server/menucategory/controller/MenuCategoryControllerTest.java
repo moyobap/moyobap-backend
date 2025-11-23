@@ -2,6 +2,7 @@
 package com.moyobab.server.menucategory.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moyobab.server.global.config.TestKakaoConfig;
 import com.moyobab.server.menucategory.entity.MenuCategoryType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
+@Import(TestKakaoConfig.class)
 class MenuCategoryControllerTest {
 
     @Autowired private MockMvc mockMvc;
