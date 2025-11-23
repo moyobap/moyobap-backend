@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SPRING_PROFILES_ACTIVE: ci
       SPRING_DATA_REDIS_HOST: 127.0.0.1
       SPRING_DATA_REDIS_PORT: 6379
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
@@ -28,7 +27,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Start MySQL with secrets
+      - name: Start MySQL
         run: |
           docker run -d \
             -e MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD} \
@@ -59,7 +58,7 @@ jobs:
       - name: Grant Gradle permission
         run: chmod +x ./gradlew
 
-      - name: Cache Gradle dependencies
+      - name: Cache Gradle Dependencies
         uses: actions/cache@v4
         with:
           path: |
@@ -68,5 +67,8 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
-      - name: Run tests
-        run: ./gradlew clean build --stacktrace
+      - name: Run Tests (test profile)
+        run: SPRING_PROFILES_ACTIVE=test ./gradlew clean test --stacktrace
+
+      - name: Build jar (without re-running tests)
+        run: ./gradlew build -x test --stacktrace
