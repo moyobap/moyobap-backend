@@ -68,7 +68,7 @@ jobs:
           restore-keys: gradle-${{ runner.os }}-
 
       - name: Run Tests (test profile)
-        run: SPRING_PROFILES_ACTIVE=test ./gradlew clean test --stacktrace
+        run: ./gradlew clean test --stacktrace -Dspring.profiles.active=test
 
       - name: Build jar (without re-running tests)
         run: ./gradlew build -x test --stacktrace
