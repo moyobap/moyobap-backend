@@ -2,7 +2,6 @@ package com.moyobab.server.global.config.kakao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,7 +10,6 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 @Component
-@ConditionalOnProperty(name = "kakao.enabled", havingValue = "true", matchIfMissing = true)
 @RequiredArgsConstructor
 public class KakaoPlaceClient {
 

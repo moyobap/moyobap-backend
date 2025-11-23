@@ -1,12 +1,14 @@
 package com.moyobab.server.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moyobab.server.global.config.TestKakaoConfig;
 import com.moyobab.server.user.dto.UserSignUpRequestDto;
 import com.moyobab.server.user.entity.LoginType;
 import com.moyobab.server.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @Transactional
+@Import(TestKakaoConfig.class)
 class UserControllerTest {
 
     @Autowired private MockMvc mockMvc;
