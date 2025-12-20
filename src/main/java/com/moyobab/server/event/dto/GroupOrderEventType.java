@@ -1,4 +1,4 @@
-package com.moyobab.server.event.entity;
+package com.moyobab.server.event.dto;
 
 public enum GroupOrderEventType {
     GROUP_CREATED,
