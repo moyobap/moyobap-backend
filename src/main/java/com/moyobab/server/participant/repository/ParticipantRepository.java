@@ -9,4 +9,6 @@ import java.util.List;
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
     @EntityGraph(attributePaths = {"groupOrder"})
     List<Participant> findByGroupOrderId(Long groupOrderId);
+
+    boolean existsByGroupOrderIdAndUserId(Long groupOrderId, Long userId);
 }
