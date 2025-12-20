@@ -1,9 +1,12 @@
 package com.moyobab.server.grouporder.service;
 
+import com.moyobab.server.event.dto.GroupOrderEventType;
+import com.moyobab.server.event.service.GroupOrderEventPublisher;
 import com.moyobab.server.grouporder.dto.GroupOrderRequestDto;
 import com.moyobab.server.grouporder.dto.GroupOrderResponseDto;
 import com.moyobab.server.grouporder.entity.GroupOrder;
 import com.moyobab.server.grouporder.mapper.GroupOrderMapper;
+import com.moyobab.server.grouporder.mapper.GroupOrderSummaryMapper;
 import com.moyobab.server.grouporder.repository.GroupOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ import java.util.stream.Collectors;
 public class GroupOrderService {
 
     private final GroupOrderRepository groupOrderRepository;
+    private final GroupOrderEventPublisher eventPublisher;
+    private final GroupOrderSummaryMapper summaryMapper;
 
     public List<GroupOrderResponseDto> getActiveGroupOrders() {
         return groupOrderRepository.findAllByClosedFalseOrderByDeadlineTimeAsc().stream()
@@ -39,6 +44,8 @@ public class GroupOrderService {
                 .build();
 
         GroupOrder saved = groupOrderRepository.save(groupOrder);
+        var summary = summaryMapper.toSummary(saved, 0, 0L);
+        eventPublisher.publishToGroupList(GroupOrderEventType.GROUP_CREATED, summary);
         return GroupOrderMapper.toResponse(saved);
     }
 }
