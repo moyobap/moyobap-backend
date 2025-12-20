@@ -9,6 +9,7 @@ import com.moyobab.server.grouporder.mapper.GroupOrderMapper;
 import com.moyobab.server.grouporder.mapper.GroupOrderSummaryMapper;
 import com.moyobab.server.grouporder.repository.GroupOrderRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.moyobab.server.user.entity.User;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GroupOrderService {
@@ -46,6 +48,7 @@ public class GroupOrderService {
         GroupOrder saved = groupOrderRepository.save(groupOrder);
         var summary = summaryMapper.toSummary(saved, 0, 0L);
         eventPublisher.publishToGroupList(GroupOrderEventType.GROUP_CREATED, summary);
+        log.info("[WS] GROUP_CREATED published: {}", summary);
         return GroupOrderMapper.toResponse(saved);
     }
 }
