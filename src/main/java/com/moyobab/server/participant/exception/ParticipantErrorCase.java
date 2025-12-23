@@ -14,7 +14,8 @@ public enum ParticipantErrorCase implements ErrorCase {
     GROUP_ORDER_CLOSED(400, 4100, "이미 모집이 종료된 그룹입니다."),
     ALREADY_JOINED(400, 4101, "이미 참여한 그룹입니다."),
     INVALID_ORDER_AMOUNT(400, 4102, "주문 금액이 올바르지 않습니다."),
-    LOGIN_REQUIRED(401, 4200, "로그인이 필요합니다.");
+    LOGIN_REQUIRED(401, 4200, "로그인이 필요합니다."),
+    PARTICIPATION_NOT_FOUND(404, 4003, "해당 그룹에 참여한 내역이 없습니다.");
 
     private final Integer httpStatusCode;
     private final Integer errorCode;
