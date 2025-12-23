@@ -39,7 +39,8 @@ public class ParticipantController {
             )
     })
     public CommonResponse<String> joinGroup(
-            @PathVariable Long groupOrderId,
+            @Parameter(description = "그룹 주문 ID", required = true)
+            @PathVariable("groupOrderId") Long groupOrderId,
             @Parameter(hidden = true) @CurrentUser Long userId,
             @RequestBody @Valid ParticipantJoinRequestDto request
     ) {
@@ -60,7 +61,8 @@ public class ParticipantController {
                     content = @Content(schema = @Schema(implementation = CommonResponse.class)))
     })
     public CommonResponse<String> updateMyAmount(
-            @PathVariable Long groupOrderId,
+            @Parameter(description = "그룹 주문 ID", required = true)
+            @PathVariable("groupOrderId") Long groupOrderId,
             @Parameter(hidden = true) @CurrentUser Long userId,
             @RequestBody @Valid ParticipantUpdateAmountRequestDto request
     ) {
