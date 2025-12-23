@@ -9,6 +9,7 @@ import com.moyobab.server.grouporder.entity.GroupOrder;
 import com.moyobab.server.grouporder.mapper.GroupOrderSummaryMapper;
 import com.moyobab.server.grouporder.repository.GroupOrderRepository;
 import com.moyobab.server.participant.dto.ParticipantJoinRequestDto;
+import com.moyobab.server.participant.dto.ParticipantUpdateAmountRequestDto;
 import com.moyobab.server.participant.entity.Participant;
 import com.moyobab.server.participant.exception.ParticipantErrorCase;
 import com.moyobab.server.participant.repository.ParticipantRepository;
@@ -87,6 +88,52 @@ public class ParticipantService {
         eventPublisher.publishToGroupList(GroupOrderEventType.GROUP_UPDATED, summary);
 
         log.info("[WS] PARTICIPANT_JOINED + GROUP_UPDATED published. groupOrderId={}, participantId={}",
+                groupOrderId, participant.getId());
+    }
+
+    @Transactional
+    public void updateMyOrderAmount(Long groupOrderId, Long userId, ParticipantUpdateAmountRequestDto request) {
+
+        if (userId == null) {
+            throw new ApplicationException(ParticipantErrorCase.LOGIN_REQUIRED);
+        }
+
+        if (request.getOrderAmount() <= 0) {
+            throw new ApplicationException(ParticipantErrorCase.INVALID_ORDER_AMOUNT);
+        }
+
+        GroupOrder groupOrder = groupOrderRepository.findById(groupOrderId)
+                .orElseThrow(() -> new ApplicationException(ParticipantErrorCase.GROUP_ORDER_NOT_FOUND));
+
+        if (groupOrder.isClosed()) {
+            throw new ApplicationException(ParticipantErrorCase.GROUP_ORDER_CLOSED);
+        }
+
+        Participant participant = participantRepository.findByGroupOrderIdAndUserId(groupOrderId, userId)
+                .orElseThrow(() -> new ApplicationException(ParticipantErrorCase.PARTICIPATION_NOT_FOUND));
+
+        // 금액 업데이트
+        participant.updateOrderAmount(request.getOrderAmount());
+
+        // 금액 변경
+        ParticipantEventDto payload = ParticipantEventDto.builder()
+                .participantId(participant.getId())
+                .userId(participant.getUser().getId())
+                .nickname(participant.getUser().getNickname())
+                .orderAmount(participant.getOrderAmount())
+                .paid(participant.isPaid())
+                .build();
+
+        eventPublisher.publishToGroupDetail(groupOrderId, GroupOrderEventType.PARTICIPANT_AMOUNT_UPDATED, payload);
+
+        // 그룹 요약 갱신
+        List<Participant> participants = participantRepository.findByGroupOrderId(groupOrderId);
+        long totalAmount = participants.stream().mapToLong(Participant::getOrderAmount).sum();
+
+        GroupOrderSummaryDto summary = summaryMapper.toSummary(groupOrder, participants.size(), totalAmount);
+        eventPublisher.publishToGroupList(GroupOrderEventType.GROUP_UPDATED, summary);
+
+        log.info("[WS] PARTICIPANT_AMOUNT_UPDATED + GROUP_UPDATED published. groupOrderId={}, participantId={}",
                 groupOrderId, participant.getId());
     }
 }
