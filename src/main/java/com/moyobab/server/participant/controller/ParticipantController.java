@@ -3,6 +3,7 @@ package com.moyobab.server.participant.controller;
 import com.moyobab.server.auth.resolver.CurrentUser;
 import com.moyobab.server.global.response.CommonResponse;
 import com.moyobab.server.participant.dto.ParticipantJoinRequestDto;
+import com.moyobab.server.participant.dto.ParticipantUpdateAmountRequestDto;
 import com.moyobab.server.participant.service.ParticipantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,11 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,5 +45,26 @@ public class ParticipantController {
     ) {
         participantService.joinGroup(groupOrderId, userId, request);
         return CommonResponse.success("그룹 참여 완료");
+    }
+
+    @PatchMapping("/{groupOrderId}/participants/me")
+    @Operation(summary = "내 참여 금액 수정", description = "그룹 주문에서 내가 등록한 주문 금액을 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "금액 수정 성공",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 (모집 종료, 금액 오류 등)",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "401", description = "인증되지 않은 사용자 요청",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+            @ApiResponse(responseCode = "404", description = "참여 내역 또는 그룹 주문 없음",
+                    content = @Content(schema = @Schema(implementation = CommonResponse.class)))
+    })
+    public CommonResponse<String> updateMyAmount(
+            @PathVariable Long groupOrderId,
+            @Parameter(hidden = true) @CurrentUser Long userId,
+            @RequestBody @Valid ParticipantUpdateAmountRequestDto request
+    ) {
+        participantService.updateMyOrderAmount(groupOrderId, userId, request);
+        return CommonResponse.success("주문 금액 수정 완료");
     }
 }
