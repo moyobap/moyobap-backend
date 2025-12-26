@@ -32,4 +32,8 @@ public class Participant extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_order_id", nullable = false)
     private GroupOrder groupOrder;
+
+    public void updateOrderAmount(long orderAmount) {
+        this.orderAmount = orderAmount;
+    }
 }
